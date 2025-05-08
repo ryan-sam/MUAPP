@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MUAPP</string>
+    <string name="add_task">Add Task</string>
+    <string name="Intro_text">Welcome to the MUAPP</string>
+</resources>
