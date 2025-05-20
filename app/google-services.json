@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81417754072",
+    "project_id": "muapp-abd9b",
+    "storage_bucket": "muapp-abd9b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81417754072:android:f95cd617bec5a9bb6c4ead",
+        "android_client_info": {
+          "package_name": "com.example.muapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsmxUHi5w_b08bIc9SrUep7EvJO6LgkSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

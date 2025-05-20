@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services")
 //     kotlin("kapt")
 }
 android {
@@ -49,8 +50,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation("androidx.room:room-runtime:2.7.0")
-    implementation("androidx.room:room-ktx:2.7.0")
+    implementation("androidx.room:room-runtime:2.7.1")
+    implementation("androidx.room:room-ktx:2.7.1")
     kapt("androidx.room:room-compiler:2.7.1")
     // navigatgtion
 
@@ -68,6 +69,19 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.1")
     implementation("androidx.activity:activity-compose:1.7.2")
 //    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    // firebase authentication
+    // firebase authentication
+    implementation("com.google.firebase:firebase-auth-ktx")
+    // firebase database
+    implementation("com.google.firebase:firebase-database-ktx")
+    //firebase storage
+    implementation("com.google.firebase:firebase-storage-ktx")
+    // coil : image loader
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
    implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)

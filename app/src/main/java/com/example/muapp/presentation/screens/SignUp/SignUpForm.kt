@@ -1,5 +1,6 @@
 package com.example.muapp.presentation.screens.SignUp
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,8 +18,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,23 +30,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.muapp.R
-import com.example.muapp.data.repository.MockToDoRepository
-import com.example.muapp.presentation.screens.SignUp.SignUpForm
-import com.example.muapp.presentation.screens.addToDo.AddToDoForm
-import com.example.muapp.presentation.screens.dashboard.DashboardViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
-fun SignUpForm() {
+fun SignUpForm(navController: NavController) {
+    val context =LocalContext.current // declares current processing activity
     var confirmpassword by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var error by remember {mutableStateOf<String?>(null)} //capture and ref errors
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -100,7 +103,8 @@ fun SignUpForm() {
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Gray
-                    )
+                    ),
+                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -114,36 +118,63 @@ fun SignUpForm() {
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Gray
-                    )
+                    ),
+                    visualTransformation = PasswordVisualTransformation()
+
                 )
+                error?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = { },
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(text = "Sign up", fontSize = 16.sp)
-                }
-                Text(
-                    text = "Already have an account ? login.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.clickable {
-                        ("login")
+                    onClick = {
+                       if (password != confirmpassword) {
+                           error = "Password does not match!!"
+                       }  else{
+                           // register user
+                           registerUser(email, password,
+                               context,navController,
+                               onError =  {errorMsg -> error = errorMsg})
+                       }
                     }
                 )
+                 {
+                    Text(text = "Sign up", fontSize = 16.sp)
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextButton(
+                    onClick = { navController.navigate("login") },
+                ){
+                    Text("Already have an account?login")
+                }
             }
         }
     }
 }
 
+ fun registerUser(
+    email: String,
+    password: String,
+    context: Context,
+    navController: NavController,
+    onError: (String) -> Unit
+) {
+     Firebase.auth.createUserWithEmailAndPassword(email, password)
+         .addOnCompleteListener{
+         task -> if (task.isSuccessful){
+             navController.navigate("login")
+         } else{
+             onError(task.exception?.message ?:
+             "Registration Failed")
+         }
+     }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun SignUpFormPreview(){
-    SignUpForm()
+    SignUpForm(rememberNavController())
 
 
     }

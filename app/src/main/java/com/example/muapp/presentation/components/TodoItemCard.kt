@@ -38,7 +38,9 @@ fun onCompleteChange (){}
 @Composable
 fun TodoItemCard(
     todo: TodoItem,
-    onCompleteChange: (Boolean) -> Unit
+    onCompleteChange: (Boolean) -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: ()-> Unit
 
 ) {
     // check box, text to display text, image container d
@@ -76,7 +78,7 @@ fun TodoItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
-                    onClick = {},
+                    onClick = { onDeleteClick()},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
                     )
@@ -86,7 +88,7 @@ fun TodoItemCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
-                    onClick = {},
+                    onClick = { onEditClick()},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Gray
                     )
@@ -108,22 +110,4 @@ fun TodoItemCard(
 
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun TodoItemPreview() {
 
-    TodoItemCard(
-        todo = TodoItem(
-            id = 1,
-            title = "Buy Groceries",
-            description = "Milk, Eggs, and Bread",
-            imageUri = null,
-            tasker = "Ryan",
-            isCompleted = false,
-        ),
-        onCompleteChange = { isChecked ->
-            println("Checked: $isChecked")
-        }
-    )
-
-}

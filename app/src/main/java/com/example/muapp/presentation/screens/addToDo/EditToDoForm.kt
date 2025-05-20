@@ -1,5 +1,4 @@
-package com.example.muapp.presentation.screens.addToDo
-
+ package com.example.muapp.presentation.screens.addToDo
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,15 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.muapp.data.model.TodoItem
 import com.example.muapp.data.repository.MockToDoRepository
 import com.example.muapp.presentation.screens.dashboard.DashboardViewModel
 
 // 1. add the viewmodel with fun to operate
 // 2. onDismiss as our  form will be showcased on a pop up
 @Composable
-fun AddToDoForm(
-    viewModel: DashboardViewModel,
+fun EditToDoForm(
+    todo: TodoItem,
+    onSubmit: (TodoItem) -> Unit,
     onDismiss: () -> Unit
+
 
 ){
     val context = LocalContext.current
@@ -50,7 +52,7 @@ fun AddToDoForm(
     horizontalAlignment = Alignment.CenterHorizontally)
     {
         Text(
-            text = "Add To Do",
+            text = "Edit  To Do",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -80,12 +82,17 @@ fun AddToDoForm(
             }
             Button(onClick = {
                 if (title.isNotBlank()){
-//                    viewModel.addToDo(title,description,tasker)
-                    viewModel.addTodo(title,description,tasker,imageUri)
-                    onDismiss()
+                    val updated = todo.copy(
+                        title = title,
+                        description = description,
+                        tasker = tasker
+                    )
+                    onSubmit(updated)
+                                onDismiss()
+//
                 }
             }, enabled = title.isNotBlank()) {
-                Text("Add to do")
+                Text("save changes")
             }
         }
     }
@@ -93,12 +100,10 @@ fun AddToDoForm(
 
 
 @Preview(showBackground = true)
-@Composable
-fun AddToDoFormPreview(){
-   val view_Model=  DashboardViewModel(repository = MockToDoRepository())
-    AddToDoForm(
-        viewModel = view_Model,
-        onDismiss = {}
+    @Composable
+    fun EditToDoFormPreview(){
+        val todo = TodoItem(1,"1","food","playing football","","task",2025,false)
+        EditToDoForm(todo, {}, {})
+    }
 
-    )
-}
+

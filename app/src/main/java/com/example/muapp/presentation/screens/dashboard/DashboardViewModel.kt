@@ -1,5 +1,5 @@
 package com.example.muapp.presentation.screens.dashboard
-
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.muapp.data.model.TodoItem
@@ -53,7 +53,21 @@ class DashboardViewModel @Inject constructor(
         initialValue = emptyList()
 
     )
-
+    val firebaseTodos : StateFlow<List<TodoItem>> =
+        repository.fetchtodosFromFirebase().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue =  emptyList()
+        )
+    fun deleteTodoFromFirebase(todo: TodoItem){
+        viewModelScope.launch {
+            repository.deleteTodoFirebase(todo)
+        }
+    } fun updateTodoFromFirebase(todo: TodoItem){
+        viewModelScope.launch {
+            repository.updateTodoFirebase(todo)
+        }
+    }
     // functions working on the data being worked on
     fun toogleTodoCompletion(todoId: Int){
         // 1. making refrence to all todos
@@ -74,18 +88,25 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun addTodo(
-        title: String, description: String, tasker:String){
+        title: String, description: String, tasker: String, imageUri: Uri?
+    ){
         viewModelScope.launch{
             // we create new item
+            var imageUrl: String? = null
+            if (imageUri != null ){
+                imageUrl = repository.uploadImagetoFirebase(imageUri)
+            }
             val newTodo = TodoItem(
                 id = 0,
                 title = title,
                 description = description,
-                imageUri = null,
+                imageUri = imageUrl,
                 tasker = tasker,
                 isCompleted = false
             )
             repository.insertTodo(newTodo)
+            // firebase insert
+            repository.uploadToFirebase(newTodo)
         }
     }
 }

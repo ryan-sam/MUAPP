@@ -9,12 +9,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "todos")
 // define the data class by adding data keyword
 data class TodoItem (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String,
-    val description: String,
-    val imageUri: String?,
-    val tasker: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val firebase_id: String = "",
+    val title: String = "",
+    val description: String = "",
+    val imageUri: String? = "",
+    val tasker: String= "",
     val createdAt: Long = System.currentTimeMillis(), // captures time
     val isCompleted: Boolean = false
 )

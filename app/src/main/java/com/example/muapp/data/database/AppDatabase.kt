@@ -8,7 +8,7 @@ import com.example.muapp.data.model.TodoItem
 // Add annotation database to mark tis class as database migration layer
 @Database(
     entities = [TodoItem::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
